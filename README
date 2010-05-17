@@ -1,0 +1,38 @@
+NAME
+    App::QuoteCC - Take a quote file and emit a C program that spews a
+    random quote
+
+SYNOPSIS
+    Compile a quotes file to a stand-alone binary:
+
+        curl http://v.nix.is/~failo/quotes.yml | quotecc --quotes=- --format=YAML | gcc -x c -o /usr/local/bin/failo-wisdom -
+        curl http://www.trout.me.uk/quotes.txt | quotecc --quotes=- --format=Fortune | gcc -x c -o /usr/local/bin/perl-wisdom -
+
+    See how small it is!:
+
+        du -sh /usr/local/bin/*-wisdom
+        56K     /usr/local/bin/failo-wisdom
+        80K     /usr/local/bin/perl-wisdom
+
+    Emit a random quote:
+
+        time /usr/local/bin/failo-wisdom
+        Support Batman - vote for the British National Party
+
+        real    0m0.003s
+        user    0m0.000s
+        sys     0m0.004s
+
+    Emit all quotes:
+
+        /usr/local/bin/failo-wisdom --all > /usr/local/bin/quotes.txt
+
+AUTHOR
+    Ævar Arnfjörð Bjarmason <avar@cpan.org>
+
+LICENSE AND COPYRIGHT
+    Copyright 2010 Ævar Arnfjörð Bjarmason <avar@cpan.org>
+
+    This program is free software, you can redistribute it and/or modify it
+    under the same terms as Perl itself.
+

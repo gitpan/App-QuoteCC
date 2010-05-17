@@ -1,0 +1,15 @@
+Changes
+LICENSE
+MANIFEST
+META.json
+META.yml
+README
+bin/quotecc
+dist.ini
+lib/App/QuoteCC.pm
+lib/App/QuoteCC/Format/Fortune.pm
+lib/App/QuoteCC/Format/YAML.pm
+lib/App/QuoteCC/Role/Format.pm
+t/00-compile.t
+t/compile-quotes.t
+t/release-pod-syntax.t
