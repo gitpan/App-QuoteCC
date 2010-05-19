@@ -1,13 +1,13 @@
-package App::QuoteCC::Format::Fortune;
+package App::QuoteCC::Input::Fortune;
 BEGIN {
-  $App::QuoteCC::Format::Fortune::VERSION = '0.01';
+  $App::QuoteCC::Input::Fortune::VERSION = '0.02';
 }
 
 use perl5i::latest;
 use Moose;
 use namespace::clean -except => 'meta';
 
-with qw/ App::QuoteCC::Role::Format /;
+with qw/ App::QuoteCC::Role::Input /;
 
 sub quotes {
     my ($self) = @_;
@@ -24,7 +24,7 @@ __PACKAGE__->meta->make_immutable;
 
 =head1 NAME
 
-App::QuoteCC::Format::Fortune - Read quotes from a L<fortune(1)> file
+App::QuoteCC::Input::Fortune - Read quotes from a L<fortune(1)> file
 
 =head1 AUTHOR
 

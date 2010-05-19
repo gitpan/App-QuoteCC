@@ -1,6 +1,6 @@
-package App::QuoteCC::Format::YAML;
+package App::QuoteCC::Input::YAML;
 BEGIN {
-  $App::QuoteCC::Format::YAML::VERSION = '0.01';
+  $App::QuoteCC::Input::YAML::VERSION = '0.02';
 }
 
 use perl5i::latest;
@@ -8,7 +8,7 @@ use Moose;
 use YAML::Syck qw/ Load /;
 use namespace::clean -except => 'meta';
 
-with qw/ App::QuoteCC::Role::Format /;
+with qw/ App::QuoteCC::Role::Input /;
 
 sub quotes {
     my ($self) = @_;
@@ -25,7 +25,7 @@ __PACKAGE__->meta->make_immutable;
 
 =head1 NAME
 
-App::QuoteCC::Format::YAML - Read quotes from a YAML file with L<YAML::XS>
+App::QuoteCC::Input::YAML - Read quotes from a YAML file with L<YAML::XS>
 
 =head1 AUTHOR
 

@@ -1,5 +1,5 @@
 ---
-abstract: 'Take a quote file and emit a C program that spews a random quote'
+abstract: 'Take a quote file and emit a standalone program that spews a random quote'
 author:
   - 'Ævar Arnfjörð Bjarmason <avar@cpan.org>'
 build_requires:
@@ -19,6 +19,8 @@ no_index:
     - t
 recommends: {}
 requires:
+  Data::Dump: 0
+  Data::Section: 0
   File::Slurp: 0
   Moose: 0
   Moose::Role: 0
@@ -34,4 +36,4 @@ resources:
   homepage: http://search.cpan.org/dist/App-QuoteCC/
   license: http://dev.perl.org/licenses/
   repository: http://github.com/avar/app-quotecc
-version: 0.01
+version: 0.02

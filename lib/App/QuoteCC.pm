@@ -1,13 +1,11 @@
 package App::QuoteCC;
 BEGIN {
-  $App::QuoteCC::VERSION = '0.01';
+  $App::QuoteCC::VERSION = '0.02';
 }
 
 use perl5i::latest;
 use Moose;
-use File::Slurp qw/ write_file /;
-use Template;
-use namespace::clean -except => [ qw< meta plugins > ];
+use namespace::clean -except => 'meta';
 
 with qw/ MooseX::Getopt::Dashes /;
 
@@ -21,22 +19,22 @@ has help => (
     documentation => 'This help message',
 );
 
-has quotes => (
+has input => (
     traits        => [ qw/ Getopt / ],
-    cmd_aliases   => 'q',
-    cmd_flag      => 'quotes',
+    cmd_aliases   => 'i',
+    cmd_flag      => 'input',
     isa           => 'Str',
     is            => 'ro',
     documentation => 'The quotes file to compile from. - for STDIN',
 );
 
-has format => (
+has input_format => (
     traits        => [ qw/ Getopt / ],
-    cmd_aliases   => 'f',
-    cmd_flag      => 'format',
+    cmd_aliases   => 'I',
+    cmd_flag      => 'input-type',
     isa           => 'Str',
     is            => 'ro',
-    documentation => 'The format of the file. Any App::QuotesCC::Format::*',
+    documentation => 'The format of the input quotes file. Any App::QuotesCC::Input::*',
 );
 
 has output => (
@@ -49,63 +47,45 @@ has output => (
     documentation => 'Where to output the compiled file, - for STDOUT',
 );
 
+has output_format => (
+    traits        => [ qw/ Getopt / ],
+    cmd_aliases   => 'O',
+    cmd_flag      => 'output-type',
+    isa           => 'Str',
+    is            => 'ro',
+    documentation => 'The format of the output file. Any App::QuotesCC::Output::*',
+);
+
 sub run {
     my ($self) = @_;
 
-    # Get quotes
-    my $quotes = do {
-        my $quotes_class_short = $self->format;
-        my $quotes_class = "App::QuoteCC::Format::" . $quotes_class_short;
-        $quotes_class->require;
-        $quotes_class->new(
-            file => $self->quotes,
-        )->quotes;
+    my $dynaload = sub {
+        my ($vars, $new_args) = @_;
+        my ($self_method_type, $class_type) = @$vars;
+        my %args = %$new_args;
+
+        my $x_class_short = $self->$self_method_type;
+        my $x_class = "App::QuoteCC::${class_type}::" . $x_class_short;
+        $x_class->require;
+        my $obj = $x_class->new(%args);
+        return $obj;
     };
 
-    # Get output
-    my $out = $self->process_template($quotes);
-
-    # Spew output
-    given ($self->output) {
-        when ('-') {
-            print $out;
-        }
-        default {
-            write_file($_, $out);
-        }
-    }
+    my $input  = $dynaload->(
+        [ qw/ input_format Input / ],
+        { file => $self->input },
+    );
+    my $quotes = $input->quotes;
+    my $output = $dynaload->(
+        [ qw/ output_format Output / ],
+        {
+            file => $self->output,
+            quotes => $quotes,
+        },
+    );
+    $output->output;
 
     return;
-}
-
-sub process_template {
-    my ($self, $quotes) = @_;
-    my $out;
-
-    Template->new->process(
-        \*DATA,
-        {
-            quotes => $quotes,
-            size => scalar(@$quotes),
-            escape => sub {
-                my $text = shift;
-                $text =~ s/"/\\"/g;
-                my $was = $text;
-                $text =~ s/\\(\$)/\\\\$1/g;
-                given ($text) {
-                    when (/\n/) {
-                        return join(qq[\\n"\n], map { qq["$_] } split /\n/, $text). q["];
-                    }
-                    default {
-                        return qq["$text"];
-                    }
-                }
-            },
-        },
-        \$out
-    );
-
-    return $out;
 }
 
 __PACKAGE__->meta->make_immutable;
@@ -114,33 +94,80 @@ __PACKAGE__->meta->make_immutable;
 
 =head1 NAME
 
-App::QuoteCC - Take a quote file and emit a C program that spews a random quote
+App::QuoteCC - Take a quote file and emit a standalone program that spews a random quote
 
 =head1 SYNOPSIS
 
 Compile a quotes file to a stand-alone binary:
 
-    curl http://v.nix.is/~failo/quotes.yml | quotecc --quotes=- --format=YAML | gcc -x c -o /usr/local/bin/failo-wisdom -
-    curl http://www.trout.me.uk/quotes.txt | quotecc --quotes=- --format=Fortune | gcc -x c -o /usr/local/bin/perl-wisdom -
+    curl http://v.nix.is/~failo/quotes.yml | quotecc -i - -I YAML -o - -O C | gcc -x c -o failo-wisdom -
+    curl http://www.trout.me.uk/quotes.txt | quotecc -i - -I Fortune -o - -O C | gcc -x c -o perl-wisdom -
 
-See how small it is!:
+Or to a fast stand-alone minimal Perl script:
 
-    du -sh /usr/local/bin/*-wisdom
-    56K     /usr/local/bin/failo-wisdom
-    80K     /usr/local/bin/perl-wisdom
+    curl http://v.nix.is/~failo/quotes.yml | quotecc -i - -I YAML -o failo-wisdom.pl -O Perl
+    curl http://www.trout.me.uk/quotes.txt | quotecc -i - -I Fortune -o perl-wisdom.pl -O Perl
 
-Emit a random quote:
+See how small they are:
 
-    time /usr/local/bin/failo-wisdom
+    $ du -sh *-wisdom*
+    56K     failo-wisdom
+    44K     failo-wisdom.pl
+    80K     perl-wisdom
+    76K     perl-wisdom.pl
+
+Emit a random quote with the C program:
+
+    time (./failo-wisdom && ./perl-wisdom)
     Support Batman - vote for the British National Party
+    < dha> Now all I have to do is learn php
+    <@sungo> it's easy.
+    <@sungo> take your perl knowledge. now smash it against child pornography
 
-    real    0m0.003s
+    real    0m0.004s
     user    0m0.000s
+    sys     0m0.008s
+
+Or with the Perl program:
+
+    $ time (perl failo-wisdom.pl && perl perl-wisdom.pl)
+    I just see foreign words like private public static void feces implements shit extending penis
+    <@pndc> Imagine if cleaners were treated like sysadmins. "I've just
+            pissed all over the office floor; it's the cleaner's fault."
+
+    real    0m0.022s
+    user    0m0.012s
     sys     0m0.004s
 
 Emit all quotes:
 
-    /usr/local/bin/failo-wisdom --all > /usr/local/bin/quotes.txt
+    ./failo-wisdom --all > /tmp/quotes.txt
+
+Emit quotes to interactive shells on login, in F</etc/profile>:
+
+    # spread failo's wisdom to interactive shells
+    if [[ $- == *i* ]] ; then
+        failo-wisdom
+    fi
+
+=head1 DESCRIPTION
+
+I wrote this program because using L<fortune(1)> and Perl in
+F</etc/profile> to emit a random quote on login was too slow. On my
+system L<fortune(1)> can take ~100 ms from a cold start, although
+subsequent invocations when it's in cache are ~10-20 ms.
+
+Similarly using Perl is also slow, this is in the 80 ms range:
+
+    perl -COEL -MYAML::XS=LoadFile -E'@q = @{ LoadFile("/path/to/quotes.yml") }; @q && say $q[rand @q]'
+
+Either way, when you have a 40 ms ping time to the remote machine
+showing that quote is the major noticeable delay when you do I<ssh
+machine>.
+
+L<quotecc> solves that problem, showing a quote takes around 4 ms
+now. That's comparable with any hello wold program in C that I
+produce.
 
 =head1 AUTHOR
 
@@ -155,47 +182,3 @@ it under the same terms as Perl itself.
 
 =cut
 
-__DATA__
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include <sys/time.h>
-
-const char* const quotes[[% size %]] = {
-[% FOREACH quote IN quotes
-%]    [% escape(quote) %],
-[% END
-%]};
-
-/* returns random integer between min and max, inclusive */
-const int rand_range(const int min, const int max)
-{
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    const long int n = tv.tv_usec * getpid();
-    srand(n);
-
-    return (rand() % (max + 1 - min) + min);
-}
-
-const int main(const int argc, const char **argv)
-{
-    int i;
-    const char* const all = "--all";
-    const size_t all_length = strlen(all);
-
-    if (argc == 2 &&
-        strlen(argv[1]) == all_length &&
-        !strncmp(argv[1], all, all_length)) {
-        for (i = 0; i < [% size %]; i++) {
-            puts(quotes[i]);
-        }
-    } else {
-        const int quote = rand_range(0, [% size %]);
-        puts(quotes[quote]);
-    }
-
-    return EXIT_SUCCESS;
-}

@@ -1,6 +1,6 @@
-package App::QuoteCC::Role::Format;
+package App::QuoteCC::Role::Output;
 BEGIN {
-  $App::QuoteCC::Role::Format::VERSION = '0.01';
+  $App::QuoteCC::Role::Output::VERSION = '0.02';
 }
 
 use perl5i::latest;
@@ -8,10 +8,15 @@ use Moose::Role;
 use namespace::clean -except => 'meta';
 
 has file => (
-    traits        => [ qw/ Getopt / ],
     isa           => 'Str',
     is            => 'ro',
-    documentation => 'The quotes file to compile from. - for STDIN',
+    documentation => 'The output file to compile to. - for STDOUT',
+);
+
+has quotes => (
+    isa           => 'ArrayRef[Str]',
+    is            => 'ro',
+    documentation => 'The quotes to compile to',
 );
 
 sub file_handle {
@@ -20,14 +25,16 @@ sub file_handle {
 
     given ($file) {
         when ('-') {
-            return *STDIN;
+            return *STDOUT;
         }
         default {
-            open my $fh, '<', $file;
+            open my $fh, '>', $file;
             return $fh;
         }
     }
 }
+
+requires 'output';
 
 1;
 
@@ -35,7 +42,7 @@ sub file_handle {
 
 =head1 NAME
 
-App::QuoteCC::Role::Format - A role representing a L<App::QuoteCC> format
+App::QuoteCC::Role::Output - A role representing a L<App::QuoteCC> output format
 
 =head1 AUTHOR
 

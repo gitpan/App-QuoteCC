@@ -7,9 +7,12 @@ README
 bin/quotecc
 dist.ini
 lib/App/QuoteCC.pm
-lib/App/QuoteCC/Format/Fortune.pm
-lib/App/QuoteCC/Format/YAML.pm
-lib/App/QuoteCC/Role/Format.pm
+lib/App/QuoteCC/Input/Fortune.pm
+lib/App/QuoteCC/Input/YAML.pm
+lib/App/QuoteCC/Output/C.pm
+lib/App/QuoteCC/Output/Perl.pm
+lib/App/QuoteCC/Role/Input.pm
+lib/App/QuoteCC/Role/Output.pm
 t/00-compile.t
 t/compile-quotes.t
 t/release-pod-syntax.t
