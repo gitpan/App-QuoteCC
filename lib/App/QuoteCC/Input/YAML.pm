@@ -1,6 +1,6 @@
 package App::QuoteCC::Input::YAML;
 BEGIN {
-  $App::QuoteCC::Input::YAML::VERSION = '0.02';
+  $App::QuoteCC::Input::YAML::VERSION = '0.03';
 }
 
 use perl5i::latest;

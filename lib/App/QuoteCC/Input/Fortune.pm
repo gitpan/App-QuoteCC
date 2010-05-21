@@ -1,6 +1,6 @@
 package App::QuoteCC::Input::Fortune;
 BEGIN {
-  $App::QuoteCC::Input::Fortune::VERSION = '0.02';
+  $App::QuoteCC::Input::Fortune::VERSION = '0.03';
 }
 
 use perl5i::latest;

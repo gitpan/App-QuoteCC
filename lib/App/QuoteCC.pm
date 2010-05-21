@@ -1,6 +1,6 @@
 package App::QuoteCC;
 BEGIN {
-  $App::QuoteCC::VERSION = '0.02';
+  $App::QuoteCC::VERSION = '0.03';
 }
 
 use perl5i::latest;

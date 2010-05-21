@@ -11,11 +11,7 @@ use ExtUtils::MakeMaker 6.31;
 my %WriteMakefileArgs = (
   'ABSTRACT' => 'Take a quote file and emit a standalone program that spews a random quote',
   'AUTHOR' => 'Ævar Arnfjörð Bjarmason <avar@cpan.org>',
-  'BUILD_REQUIRES' => {
-    'File::Find' => '0',
-    'File::Temp' => '0',
-    'Test::More' => '0'
-  },
+  'BUILD_REQUIRES' => {},
   'CONFIGURE_REQUIRES' => {
     'ExtUtils::MakeMaker' => '6.31'
   },
@@ -28,7 +24,7 @@ my %WriteMakefileArgs = (
   'PREREQ_PM' => {
     'Data::Dump' => '0',
     'Data::Section' => '0',
-    'File::Slurp' => '0',
+    'Encode' => '0',
     'Moose' => '0',
     'Moose::Role' => '0',
     'MooseX::Getopt::Dashes' => '0',
@@ -37,7 +33,7 @@ my %WriteMakefileArgs = (
     'namespace::clean' => '0',
     'perl5i::latest' => '0'
   },
-  'VERSION' => '0.02',
+  'VERSION' => '0.03',
   'test' => {
     'TESTS' => 't/*.t'
   }

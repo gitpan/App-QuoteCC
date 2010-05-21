@@ -1,6 +1,6 @@
 package App::QuoteCC::Role::Output;
 BEGIN {
-  $App::QuoteCC::Role::Output::VERSION = '0.02';
+  $App::QuoteCC::Role::Output::VERSION = '0.03';
 }
 
 use perl5i::latest;

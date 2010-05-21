@@ -1,11 +1,10 @@
 package App::QuoteCC::Output::C;
 BEGIN {
-  $App::QuoteCC::Output::C::VERSION = '0.02';
+  $App::QuoteCC::Output::C::VERSION = '0.03';
 }
 
 use perl5i::latest;
 use Moose;
-use File::Slurp qw/ write_file /;
 use Template;
 use Data::Section qw/ -setup /;
 use namespace::clean -except => [ qw/ meta merged_section_data section_data / ];
@@ -38,7 +37,8 @@ sub output {
             print $out;
         }
         default {
-            write_file($_, $out);
+            open my $fh, ">", $_;
+            print $fh $out;
         }
     }
 
@@ -50,6 +50,10 @@ sub _process_template {
     my $quotes = $self->quotes;
     my $template = $self->template;
     my $out;
+
+    # Hack, no idea why stuff from STDIN isn't utf8 already.
+    use Encode;
+    Encode::_utf8_on($_) for @$quotes;
 
     Template->new->process(
         \$template,

@@ -1,11 +1,10 @@
 package App::QuoteCC::Output::Perl;
 BEGIN {
-  $App::QuoteCC::Output::Perl::VERSION = '0.02';
+  $App::QuoteCC::Output::Perl::VERSION = '0.03';
 }
 
 use perl5i::latest;
 use Moose;
-use File::Slurp qw/ write_file /;
 use Data::Dump 'dump';
 use Template;
 use Data::Section qw/ -setup /;
@@ -39,7 +38,8 @@ sub output {
             print $out;
         }
         default {
-            write_file($_, $out);
+            open my $fh, ">", $_;
+            print $fh $out;
         }
     }
 
@@ -75,7 +75,7 @@ __PACKAGE__->meta->make_immutable;
 
 =head1 NAME
 
-App::QuoteCC::Output::C - Emit quotes in Perl format
+App::QuoteCC::Output::Perl - Emit quotes in Perl format
 
 =head1 AUTHOR
 
