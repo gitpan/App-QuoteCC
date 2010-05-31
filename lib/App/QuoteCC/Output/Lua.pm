@@ -1,9 +1,9 @@
-package App::QuoteCC::Output::Perl;
+package App::QuoteCC::Output::Lua;
 BEGIN {
-  $App::QuoteCC::Output::Perl::AUTHORITY = 'cpan:AVAR';
+  $App::QuoteCC::Output::Lua::AUTHORITY = 'cpan:AVAR';
 }
 BEGIN {
-  $App::QuoteCC::Output::Perl::VERSION = '0.04';
+  $App::QuoteCC::Output::Lua::VERSION = '0.04';
 }
 
 use perl5i::latest;
@@ -55,15 +55,27 @@ sub _process_template {
     my $template = $self->template;
     my $out;
 
+    use Encode;
+    Encode::_utf8_on($_) for @$quotes;
+
     Template->new->process(
         \$template,
         {
             quotes => $quotes,
             size => scalar(@$quotes),
             escape => sub {
-                my ($quotes) = @_;
-                my $str = dump @$quotes;
-                return $str;
+                my $text = shift;
+                $text =~ s/"/\\"/g;
+                my $was = $text;
+                $text =~ s/\\(\$)/\\\\$1/g;
+                given ($text) {
+                    when (/\n/) {
+                        return join(qq[\\n"\n], map { qq["$_] } split /\n/, $text). q["];
+                    }
+                    default {
+                        return qq["$text"];
+                    }
+                }
             },
         },
         \$out
@@ -78,7 +90,7 @@ __PACKAGE__->meta->make_immutable;
 
 =head1 NAME
 
-App::QuoteCC::Output::Perl - Emit quotes in Perl format
+App::QuoteCC::Output::Lua - Emit quotes in Lua format
 
 =head1 AUTHOR
 
@@ -88,6 +100,8 @@ E<AElig>var ArnfjE<ouml>rE<eth> Bjarmason <avar@cpan.org>
 
 Copyright 2010 E<AElig>var ArnfjE<ouml>rE<eth> Bjarmason <avar@cpan.org>
 
+Copyright 2010 Hinrik E<Ouml>rn SigurE<eth>sson <hinrik.sig@gmail.com>
+
 This program is free software, you can redistribute it and/or modify
 it under the same terms as Perl itself.
 
@@ -95,12 +109,21 @@ it under the same terms as Perl itself.
 
 __DATA__
 __[ program ]__
-#!/usr/bin/env perl
+#!/usr/bin/env lua
 
-our @QUOTES = [% escape(quotes) %];
+require 'posix'
 
-if (@ARGV && $ARGV[0] eq '--all') {
-    print $_, "\n" for @QUOTES;
-} else {
-    print $QUOTES[rand @QUOTES], "\n";
+local quotes = {[%
+FOREACH quote IN quotes %]
+    [% escape(quote) %],[%
+END %]
 }
+
+if arg[1] == "--all" then
+    print(table.concat(quotes, "\n"))
+else
+    local pid = posix.getpid("pid")
+    local time = os.time();
+    math.randomseed(time * pid)
+    print(quotes[math.random(#quotes)])
+end

@@ -1,6 +1,9 @@
 package App::QuoteCC;
 BEGIN {
-  $App::QuoteCC::VERSION = '0.03';
+  $App::QuoteCC::AUTHORITY = 'cpan:AVAR';
+}
+BEGIN {
+  $App::QuoteCC::VERSION = '0.04';
 }
 
 use perl5i::latest;

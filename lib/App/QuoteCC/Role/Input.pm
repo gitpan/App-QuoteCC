@@ -1,6 +1,9 @@
 package App::QuoteCC::Role::Input;
 BEGIN {
-  $App::QuoteCC::Role::Input::VERSION = '0.03';
+  $App::QuoteCC::Role::Input::AUTHORITY = 'cpan:AVAR';
+}
+BEGIN {
+  $App::QuoteCC::Role::Input::VERSION = '0.04';
 }
 
 use perl5i::latest;

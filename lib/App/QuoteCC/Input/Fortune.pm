@@ -1,6 +1,9 @@
 package App::QuoteCC::Input::Fortune;
 BEGIN {
-  $App::QuoteCC::Input::Fortune::VERSION = '0.03';
+  $App::QuoteCC::Input::Fortune::AUTHORITY = 'cpan:AVAR';
+}
+BEGIN {
+  $App::QuoteCC::Input::Fortune::VERSION = '0.04';
 }
 
 use perl5i::latest;
