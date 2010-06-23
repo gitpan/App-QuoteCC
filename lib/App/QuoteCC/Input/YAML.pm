@@ -3,7 +3,7 @@ BEGIN {
   $App::QuoteCC::Input::YAML::AUTHORITY = 'cpan:AVAR';
 }
 BEGIN {
-  $App::QuoteCC::Input::YAML::VERSION = '0.04';
+  $App::QuoteCC::Input::YAML::VERSION = '0.05';
 }
 
 use perl5i::latest;

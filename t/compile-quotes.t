@@ -3,7 +3,10 @@ use Test::More;
 use App::QuoteCC;
 use File::Temp qw<tempdir tempfile>;
 
-plan skip_all => "Need curl / gcc to test" unless qx[ which curl && which gcc ];
+plan skip_all => "Need curl / gcc to test"
+    unless
+        qx[ curl --version ] =~ /^curl \d+\..*\nProtocols:/s and
+        qx[ gcc --version ]  =~ /Free Software Foundation/;
 plan tests => 160;
 
 my @test = (
@@ -23,7 +26,7 @@ for my $compiler (qw/Perl C/) {
         my $fmt = $test->{fmt};
 
         # Dir to store our stuff
-        my $dir = tempdir( "app-quotecc-XXXX", CLEANUP => 0, TMPDIR => 1 );
+        my $dir = tempdir( "app-quotecc-XXXX", CLEANUP => 1, TMPDIR => 1 );
         ok(-d $dir, "tempdir $dir exists");
         my ($fh1, $quotes) = tempfile( DIR => $dir, SUFFIX => '.quotes', EXLOCK => 0 );
         my ($fh2, $output) = tempfile( DIR => $dir, SUFFIX => '.' . lc($compiler), EXLOCK => 0 );

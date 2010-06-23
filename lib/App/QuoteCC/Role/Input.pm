@@ -3,7 +3,7 @@ BEGIN {
   $App::QuoteCC::Role::Input::AUTHORITY = 'cpan:AVAR';
 }
 BEGIN {
-  $App::QuoteCC::Role::Input::VERSION = '0.04';
+  $App::QuoteCC::Role::Input::VERSION = '0.05';
 }
 
 use perl5i::latest;

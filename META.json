@@ -4,11 +4,13 @@
       "\u00c3\u0086var Arnfj\u00c3\u00b6r\u00c3\u00b0 Bjarmason <avar@cpan.org>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 3.101461",
-   "license" : "perl_5",
+   "generated_by" : "Dist::Zilla version 4.101612, CPAN::Meta::Converter version 2.101670",
+   "license" : [
+      "perl_5"
+   ],
    "meta-spec" : {
-      "url" : "http://github.com/dagolden/cpan-meta/",
-      "version" : 2
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
    },
    "name" : "App-QuoteCC",
    "no_index" : {
@@ -24,42 +26,44 @@
       },
       "runtime" : {
          "requires" : {
-            "Data::Dump" : "0",
-            "Data::Section" : "0",
-            "Encode" : "0",
-            "Moose" : "0",
-            "Moose::Role" : "0",
-            "MooseX::Getopt::Dashes" : "0",
-            "Template" : "0",
-            "YAML::Syck" : "0",
-            "namespace::clean" : "0",
-            "perl" : "v5.10",
-            "perl5i::latest" : "0"
+            "Data::Dump" : 0,
+            "Data::Section" : 0,
+            "Encode" : 0,
+            "Moose" : 0,
+            "Moose::Role" : 0,
+            "MooseX::Getopt::Dashes" : 0,
+            "Template" : 0,
+            "YAML::Syck" : 0,
+            "namespace::clean" : 0,
+            "perl" : "v5.10.0",
+            "perl5i::latest" : 0
          }
       },
       "test" : {
          "requires" : {
-            "File::Find" : "0",
-            "File::Temp" : "0",
-            "Test::More" : "0"
+            "File::Find" : 0,
+            "File::Temp" : 0,
+            "Test::More" : 0
          }
       }
    },
+   "release_status" : "stable",
    "resources" : {
-      "Ratings" : "http://cpanratings.perl.org/d/App-QuoteCC",
       "bugtracker" : {
          "mailto" : "bug-App-QuoteCC@rt.cpan.org",
-         "url" : "https://rt.cpan.org/Public/Dist/Display.html?Name=App-QuoteCC"
+         "web" : "https://rt.cpan.org/Public/Dist/Display.html?Name=App-QuoteCC"
       },
       "homepage" : "http://search.cpan.org/dist/App-QuoteCC/",
-      "license" : "http://dev.perl.org/licenses/",
+      "license" : [
+         "http://dev.perl.org/licenses/"
+      ],
       "repository" : {
          "type" : "git",
          "url" : "git://github.com/avar/app-quotecc.git",
          "web" : "http://github.com/avar/app-quotecc"
       }
    },
-   "version" : "0.04",
+   "version" : "0.05",
    "x_authority" : "cpan:AVAR"
 }
 

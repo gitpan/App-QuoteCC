@@ -3,7 +3,7 @@ BEGIN {
   $App::QuoteCC::Output::Lua::AUTHORITY = 'cpan:AVAR';
 }
 BEGIN {
-  $App::QuoteCC::Output::Lua::VERSION = '0.04';
+  $App::QuoteCC::Output::Lua::VERSION = '0.05';
 }
 
 use perl5i::latest;
