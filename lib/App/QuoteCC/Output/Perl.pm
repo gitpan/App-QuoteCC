@@ -3,7 +3,7 @@ BEGIN {
   $App::QuoteCC::Output::Perl::AUTHORITY = 'cpan:AVAR';
 }
 BEGIN {
-  $App::QuoteCC::Output::Perl::VERSION = '0.06';
+  $App::QuoteCC::Output::Perl::VERSION = '0.07';
 }
 
 use 5.010;
@@ -12,6 +12,7 @@ use warnings;
 use Moose;
 use Data::Dump 'dump';
 use Template;
+use Encode;
 use Data::Section qw/ -setup /;
 use namespace::clean -except => [ qw/ meta merged_section_data section_data / ];
 
@@ -38,15 +39,7 @@ sub output {
     my $out  = $self->_process_template;
 
     # Spew output
-    given ($self->file) {
-        when ('-') {
-            print $out;
-        }
-        default {
-            open my $fh, ">", $_;
-            print $fh $out;
-        }
-    }
+    $self->spew_output($out);
 
     return;
 }
@@ -56,6 +49,9 @@ sub _process_template {
     my $quotes = $self->quotes;
     my $template = $self->template;
     my $out;
+
+    # emit raw octets, not UTF-8 marked strings with clever escaping.
+    $_ = encode("utf8", $_) for @$quotes;
 
     Template->new->process(
         \$template,

@@ -3,7 +3,7 @@ BEGIN {
   $App::QuoteCC::Role::Input::AUTHORITY = 'cpan:AVAR';
 }
 BEGIN {
-  $App::QuoteCC::Role::Input::VERSION = '0.06';
+  $App::QuoteCC::Role::Input::VERSION = '0.07';
 }
 
 use 5.010;
@@ -24,7 +24,7 @@ sub file_handle {
 
     given ($file) {
         when ('-') {
-            binmode STDIN, ":utf8";
+            binmode STDIN, ":encoding(UTF-8)";
             return *STDIN;
         }
         default {

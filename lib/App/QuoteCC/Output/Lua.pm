@@ -3,7 +3,7 @@ BEGIN {
   $App::QuoteCC::Output::Lua::AUTHORITY = 'cpan:AVAR';
 }
 BEGIN {
-  $App::QuoteCC::Output::Lua::VERSION = '0.06';
+  $App::QuoteCC::Output::Lua::VERSION = '0.07';
 }
 
 use 5.010;
@@ -38,15 +38,7 @@ sub output {
     my $out  = $self->_process_template;
 
     # Spew output
-    given ($self->file) {
-        when ('-') {
-            print $out;
-        }
-        default {
-            open my $fh, ">", $_;
-            print $fh $out;
-        }
-    }
+    $self->spew_output($out);
 
     return;
 }
@@ -56,9 +48,6 @@ sub _process_template {
     my $quotes = $self->quotes;
     my $template = $self->template;
     my $out;
-
-    use Encode;
-    Encode::_utf8_on($_) for @$quotes;
 
     Template->new->process(
         \$template,

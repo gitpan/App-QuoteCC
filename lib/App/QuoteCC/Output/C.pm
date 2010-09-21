@@ -3,7 +3,7 @@ BEGIN {
   $App::QuoteCC::Output::C::AUTHORITY = 'cpan:AVAR';
 }
 BEGIN {
-  $App::QuoteCC::Output::C::VERSION = '0.06';
+  $App::QuoteCC::Output::C::VERSION = '0.07';
 }
 
 use 5.010;
@@ -37,15 +37,7 @@ sub output {
     my $out  = $self->_process_template;
 
     # Spew output
-    given ($self->file) {
-        when ('-') {
-            print $out;
-        }
-        default {
-            open my $fh, ">", $_;
-            print $fh $out;
-        }
-    }
+    $self->spew_output($out);
 
     return;
 }
@@ -55,10 +47,6 @@ sub _process_template {
     my $quotes = $self->quotes;
     my $template = $self->template;
     my $out;
-
-    # Hack, no idea why stuff from STDIN isn't utf8 already.
-    use Encode;
-    Encode::_utf8_on($_) for @$quotes;
 
     Template->new->process(
         \$template,

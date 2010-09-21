@@ -1,9 +1,9 @@
-package App::QuoteCC::Input::Fortune;
+package App::QuoteCC::Input::Text;
 BEGIN {
-  $App::QuoteCC::Input::Fortune::AUTHORITY = 'cpan:AVAR';
+  $App::QuoteCC::Input::Text::AUTHORITY = 'cpan:AVAR';
 }
 BEGIN {
-  $App::QuoteCC::Input::Fortune::VERSION = '0.07';
+  $App::QuoteCC::Input::Text::VERSION = '0.07';
 }
 
 use 5.010;
@@ -18,8 +18,7 @@ sub quotes {
     my ($self) = @_;
     my $handle = $self->file_handle;
 
-    my $content = join '', <$handle>;
-    my @quotes = split /\n%\n/, $content;
+    chomp(my @quotes = <$handle>);
     return \@quotes;
 }
 
@@ -29,7 +28,7 @@ __PACKAGE__->meta->make_immutable;
 
 =head1 NAME
 
-App::QuoteCC::Input::Fortune - Read quotes from a L<fortune(1)> file
+App::QuoteCC::Input::Text - Read newline delimited quotes
 
 =head1 AUTHOR
 

@@ -3,7 +3,7 @@ BEGIN {
   $App::QuoteCC::Role::Output::AUTHORITY = 'cpan:AVAR';
 }
 BEGIN {
-  $App::QuoteCC::Role::Output::VERSION = '0.06';
+  $App::QuoteCC::Role::Output::VERSION = '0.07';
 }
 
 use 5.010;
@@ -30,16 +30,34 @@ sub file_handle {
 
     given ($file) {
         when ('-') {
+            binmode STDOUT, ":encoding(UTF-8)";
             return *STDOUT;
         }
         default {
-            open my $fh, '>', $file;
+            open my $fh, '>:encoding(UTF-8)', $file;
             return $fh;
         }
     }
 }
 
 requires 'output';
+
+sub spew_output {
+    my ($self, $out) = @_;
+
+    given ($self->file) {
+        when ('-') {
+            binmode STDOUT, ":utf8";
+            print $out;
+        }
+        default {
+            open my $fh, ">:encoding(UTF-8)", $_;
+            print $fh $out;
+        }
+    }
+
+    return;
+}
 
 1;
 

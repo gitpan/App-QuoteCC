@@ -9,6 +9,7 @@ bin/quotecc
 dist.ini
 lib/App/QuoteCC.pm
 lib/App/QuoteCC/Input/Fortune.pm
+lib/App/QuoteCC/Input/Text.pm
 lib/App/QuoteCC/Input/YAML.pm
 lib/App/QuoteCC/Output/C.pm
 lib/App/QuoteCC/Output/Lua.pm
