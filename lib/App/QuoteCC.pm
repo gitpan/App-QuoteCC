@@ -3,10 +3,12 @@ BEGIN {
   $App::QuoteCC::AUTHORITY = 'cpan:AVAR';
 }
 BEGIN {
-  $App::QuoteCC::VERSION = '0.05';
+  $App::QuoteCC::VERSION = '0.06';
 }
 
-use perl5i::latest;
+use 5.010;
+use strict;
+use warnings;
 use Moose;
 use namespace::clean -except => 'meta';
 
@@ -69,7 +71,12 @@ sub run {
 
         my $x_class_short = $self->$self_method_type;
         my $x_class = "App::QuoteCC::${class_type}::" . $x_class_short;
-        $x_class->require;
+        {
+            my $x_class_pm = $x_class;
+            $x_class_pm =~ s[::][/]g;
+            $x_class_pm .= ".pm";
+            require $x_class_pm;
+        }
         my $obj = $x_class->new(%args);
         return $obj;
     };

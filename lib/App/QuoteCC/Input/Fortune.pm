@@ -3,10 +3,12 @@ BEGIN {
   $App::QuoteCC::Input::Fortune::AUTHORITY = 'cpan:AVAR';
 }
 BEGIN {
-  $App::QuoteCC::Input::Fortune::VERSION = '0.05';
+  $App::QuoteCC::Input::Fortune::VERSION = '0.06';
 }
 
-use perl5i::latest;
+use 5.010;
+use strict;
+use warnings;
 use Moose;
 use namespace::clean -except => 'meta';
 

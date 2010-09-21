@@ -3,10 +3,12 @@ BEGIN {
   $App::QuoteCC::Role::Output::AUTHORITY = 'cpan:AVAR';
 }
 BEGIN {
-  $App::QuoteCC::Role::Output::VERSION = '0.05';
+  $App::QuoteCC::Role::Output::VERSION = '0.06';
 }
 
-use perl5i::latest;
+use 5.010;
+use strict;
+use warnings;
 use Moose::Role;
 use namespace::clean -except => 'meta';
 

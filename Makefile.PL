@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
- BEGIN { require v5.10; } 
+BEGIN { require 5.010; }
 
 use ExtUtils::MakeMaker 6.31;
 
@@ -34,10 +34,9 @@ my %WriteMakefileArgs = (
     'MooseX::Getopt::Dashes' => '0',
     'Template' => '0',
     'YAML::Syck' => '0',
-    'namespace::clean' => '0',
-    'perl5i::latest' => '0'
+    'namespace::clean' => '0'
   },
-  'VERSION' => '0.05',
+  'VERSION' => '0.06',
   'test' => {
     'TESTS' => 't/*.t'
   }

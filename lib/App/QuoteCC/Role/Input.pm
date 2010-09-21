@@ -3,10 +3,12 @@ BEGIN {
   $App::QuoteCC::Role::Input::AUTHORITY = 'cpan:AVAR';
 }
 BEGIN {
-  $App::QuoteCC::Role::Input::VERSION = '0.05';
+  $App::QuoteCC::Role::Input::VERSION = '0.06';
 }
 
-use perl5i::latest;
+use 5.010;
+use strict;
+use warnings;
 use Moose::Role;
 use namespace::clean -except => 'meta';
 
@@ -22,10 +24,11 @@ sub file_handle {
 
     given ($file) {
         when ('-') {
+            binmode STDIN, ":utf8";
             return *STDIN;
         }
         default {
-            open my $fh, '<', $file;
+            open my $fh, '<:encoding(UTF-8)', $file;
             return $fh;
         }
     }

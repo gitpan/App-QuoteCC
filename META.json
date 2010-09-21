@@ -4,7 +4,7 @@
       "\u00c3\u0086var Arnfj\u00c3\u00b6r\u00c3\u00b0 Bjarmason <avar@cpan.org>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 4.101612, CPAN::Meta::Converter version 2.101670",
+   "generated_by" : "Dist::Zilla version 4.102340, CPAN::Meta::Converter version 2.102400",
    "license" : [
       "perl_5"
    ],
@@ -35,8 +35,7 @@
             "Template" : 0,
             "YAML::Syck" : 0,
             "namespace::clean" : 0,
-            "perl" : "v5.10.0",
-            "perl5i::latest" : 0
+            "perl" : "5.010"
          }
       },
       "test" : {
@@ -63,7 +62,7 @@
          "web" : "http://github.com/avar/app-quotecc"
       }
    },
-   "version" : "0.05",
+   "version" : "0.06",
    "x_authority" : "cpan:AVAR"
 }
 

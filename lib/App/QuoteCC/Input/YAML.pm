@@ -3,10 +3,12 @@ BEGIN {
   $App::QuoteCC::Input::YAML::AUTHORITY = 'cpan:AVAR';
 }
 BEGIN {
-  $App::QuoteCC::Input::YAML::VERSION = '0.05';
+  $App::QuoteCC::Input::YAML::VERSION = '0.06';
 }
 
-use perl5i::latest;
+use 5.010;
+use strict;
+use warnings;
 use Moose;
 use YAML::Syck qw/ Load /;
 use namespace::clean -except => 'meta';

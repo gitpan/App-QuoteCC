@@ -3,10 +3,12 @@ BEGIN {
   $App::QuoteCC::Output::Perl::AUTHORITY = 'cpan:AVAR';
 }
 BEGIN {
-  $App::QuoteCC::Output::Perl::VERSION = '0.05';
+  $App::QuoteCC::Output::Perl::VERSION = '0.06';
 }
 
-use perl5i::latest;
+use 5.010;
+use strict;
+use warnings;
 use Moose;
 use Data::Dump 'dump';
 use Template;
