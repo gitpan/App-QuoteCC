@@ -3,7 +3,7 @@ BEGIN {
   $App::QuoteCC::Role::Output::AUTHORITY = 'cpan:AVAR';
 }
 BEGIN {
-  $App::QuoteCC::Role::Output::VERSION = '0.07';
+  $App::QuoteCC::Role::Output::VERSION = '0.08';
 }
 
 use 5.010;
@@ -47,11 +47,12 @@ sub spew_output {
 
     given ($self->file) {
         when ('-') {
-            binmode STDOUT, ":utf8";
+            binmode STDOUT;
             print $out;
         }
         default {
-            open my $fh, ">:encoding(UTF-8)", $_;
+            open my $fh, ">", $_;
+            binmode $fh;
             print $fh $out;
         }
     }

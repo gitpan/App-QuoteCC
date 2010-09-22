@@ -12,7 +12,9 @@ my %WriteMakefileArgs = (
   'ABSTRACT' => 'Take a quote file and emit a standalone program that spews a random quote',
   'AUTHOR' => 'Ævar Arnfjörð Bjarmason <avar@cpan.org>',
   'BUILD_REQUIRES' => {
+    'Encode' => '0',
     'File::Find' => '0',
+    'File::Slurp' => '0',
     'File::Temp' => '0',
     'Test::More' => '0'
   },
@@ -28,7 +30,6 @@ my %WriteMakefileArgs = (
   'PREREQ_PM' => {
     'Data::Dump' => '0',
     'Data::Section' => '0',
-    'Encode' => '0',
     'Moose' => '0',
     'Moose::Role' => '0',
     'MooseX::Getopt::Dashes' => '0',
@@ -36,7 +37,7 @@ my %WriteMakefileArgs = (
     'YAML::Syck' => '0',
     'namespace::clean' => '0'
   },
-  'VERSION' => '0.07',
+  'VERSION' => '0.08',
   'test' => {
     'TESTS' => 't/*.t'
   }

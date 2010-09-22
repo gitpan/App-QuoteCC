@@ -3,7 +3,7 @@ BEGIN {
   $App::QuoteCC::Output::Lua::AUTHORITY = 'cpan:AVAR';
 }
 BEGIN {
-  $App::QuoteCC::Output::Lua::VERSION = '0.07';
+  $App::QuoteCC::Output::Lua::VERSION = '0.08';
 }
 
 use 5.010;
@@ -56,17 +56,7 @@ sub _process_template {
             size => scalar(@$quotes),
             escape => sub {
                 my $text = shift;
-                $text =~ s/"/\\"/g;
-                my $was = $text;
-                $text =~ s/\\(\$)/\\\\$1/g;
-                given ($text) {
-                    when (/\n/) {
-                        return join(qq[\\n"\n], map { qq["$_] } split /\n/, $text). q["];
-                    }
-                    default {
-                        return qq["$text"];
-                    }
-                }
+                return "[===[$text]===]";
             },
         },
         \$out

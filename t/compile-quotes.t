@@ -2,13 +2,14 @@ use 5.010;
 use Test::More;
 use App::QuoteCC;
 use Encode;
+use File::Slurp qw(slurp);
 use File::Temp qw<tempdir tempfile>;
 
 plan skip_all => "Need curl / gcc to test"
     unless
         qx[ curl --version ] =~ /^curl \d+\..*\nProtocols:/s and
         qx[ gcc --version ]  =~ /Free Software Foundation/;
-plan tests => 160;
+plan tests => 380;
 
 my @test = (
     {
@@ -21,7 +22,19 @@ my @test = (
     }
 );
 
-for my $compiler (qw/Perl C/) {
+sub test_quotes_encoding {
+    my ($output, $quote, $url) = @_;
+
+    ok($quote, "Got quote from $output --all");
+    cmp_ok(length($quote), '>', 1000, "All quotes were long enough");
+    if ($url =~ /failo/) {
+        like $quote, qr/mosque on Phobos/, "sanity check";
+        like $quote, qr/Blökkumaður/, "sanity check";
+        like $quote, qr/botti líka/, "sanity check";
+    }
+}
+
+for my $compiler (qw/Perl C Lua/) {
     for my $test (@test) {
         my $url = $test->{url};
         my $fmt = $test->{fmt};
@@ -45,6 +58,22 @@ for my $compiler (qw/Perl C/) {
         ok(-s $output, "$output is non-zero size");
 
         given ($compiler) {
+            when ('Lua') {
+                for (1..10) {
+                  SKIP: {
+                    skip "Don't have a Lua on this system", 6
+                        unless qx[ lua -e 'require "posix"; print(string.format("The time is %s", os.time()));' ] =~ /^The time is \d+$/;
+                    system "chmod +x $output";
+
+                    chomp(my $quote = qx[lua $output]);
+                    ok($quote, "Got quote from $output");
+
+                    chomp($quote = qx[lua $output --all]);
+                    ok($quote, "Got quote from $output --all");
+                    test_quotes_encoding($output, $quote, $url);
+                  }
+                }
+            }
             when ('C') {
                 $cmd = qq[gcc -Wall $output -o $output.exe];
                 system $cmd;
@@ -55,26 +84,20 @@ for my $compiler (qw/Perl C/) {
 
                     chomp($quote = qx[$output.exe --all]);
                     ok($quote, "Got quote from $output.exe --all");
+                    test_quotes_encoding($output, $quote, $url);
                 }
             }
             when ('Perl') {
                 for (1..10) {
+                    my $raw = slurp($output);
+                    unlike($raw, qr/require MIME::Base64/, "Data::Dump didn't use modules");
+
                     chomp(my $quote = qx[$^X $output]);
                     ok($quote, "Got quote from $^X $output");
                     cmp_ok(length($quote), '>', 5, "quote was long enough");
 
                     chomp($quote = qx[$^X $output --all]);
-
-                    # The program just spews raw octets, but we know
-                    # they're UTF-8 octets.
-                    Encode::_utf8_on($quote);
-
-                    ok($quote, "Got quote from $^X $output --all");
-                    cmp_ok(length($quote), '>', 1000, "All quotes were long enough");
-                    if ($url =~ /failo/) {
-                        like $quote, qr/mosque on Phobos/, "sanity check";
-                        like $quote, qr/Blökkumaður/, "sanity check";
-                    }
+                    test_quotes_encoding($output, $quote, $url);
                 }
             }
         }
