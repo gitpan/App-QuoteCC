@@ -26,7 +26,6 @@
       },
       "runtime" : {
          "requires" : {
-            "Data::Dump" : 0,
             "Data::Section" : 0,
             "Moose" : 0,
             "Moose::Role" : 0,
@@ -63,7 +62,7 @@
          "web" : "http://github.com/avar/app-quotecc"
       }
    },
-   "version" : "0.08",
+   "version" : "0.09",
    "x_authority" : "cpan:AVAR"
 }
 

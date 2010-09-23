@@ -3,7 +3,7 @@ BEGIN {
   $App::QuoteCC::AUTHORITY = 'cpan:AVAR';
 }
 BEGIN {
-  $App::QuoteCC::VERSION = '0.08';
+  $App::QuoteCC::VERSION = '0.09';
 }
 
 use 5.010;

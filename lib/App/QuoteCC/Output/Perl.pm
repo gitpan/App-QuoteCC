@@ -3,14 +3,13 @@ BEGIN {
   $App::QuoteCC::Output::Perl::AUTHORITY = 'cpan:AVAR';
 }
 BEGIN {
-  $App::QuoteCC::Output::Perl::VERSION = '0.08';
+  $App::QuoteCC::Output::Perl::VERSION = '0.09';
 }
 
 use 5.010;
 use strict;
 use warnings;
 use Moose;
-use Data::Dump 'dump';
 use Template;
 use Data::Section qw/ -setup /;
 use namespace::clean -except => [ qw/ meta merged_section_data section_data / ];
@@ -53,11 +52,10 @@ sub _process_template {
         \$template,
         {
             quotes => $quotes,
-            size => scalar(@$quotes),
-            escape => sub {
-                my ($quotes) = @_;
-                my $str = dump @$quotes;
-                return $str;
+            repeat => sub {
+                my ($s, $c) = @_;
+                $c += 4;
+                return scalar $s x $c;
             },
         },
         \$out
@@ -91,10 +89,13 @@ __DATA__
 __[ program ]__
 #!/usr/bin/env perl
 
-our @QUOTES = [% escape(quotes) %];
-
 if (@ARGV && $ARGV[0] eq '--all') {
-    print $_, "\n" for @QUOTES;
+    print for @QUOTES;
 } else {
-    print $QUOTES[rand @QUOTES], "\n";
+    print $QUOTES[rand @QUOTES];
 }
+
+BEGIN { our @QUOTES = ([% FOREACH quote IN quotes %]<<'----[% loop.count %]----8========D',[% END %]); }
+[% FOREACH quote IN quotes %][% quote %]
+----[% loop.count %]----8========D[% UNLESS loop.last %]
+[% END %][% END %]

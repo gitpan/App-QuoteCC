@@ -21,7 +21,6 @@ no_index:
   directory:
     - t
 requires:
-  Data::Dump: 0
   Data::Section: 0
   Moose: 0
   Moose::Role: 0
@@ -35,5 +34,5 @@ resources:
   homepage: http://search.cpan.org/dist/App-QuoteCC/
   license: http://dev.perl.org/licenses/
   repository: git://github.com/avar/app-quotecc.git
-version: 0.08
+version: 0.09
 x_authority: cpan:AVAR
