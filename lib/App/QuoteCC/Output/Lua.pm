@@ -3,7 +3,7 @@ BEGIN {
   $App::QuoteCC::Output::Lua::AUTHORITY = 'cpan:AVAR';
 }
 BEGIN {
-  $App::QuoteCC::Output::Lua::VERSION = '0.09';
+  $App::QuoteCC::Output::Lua::VERSION = '0.10';
 }
 
 use 5.010;
